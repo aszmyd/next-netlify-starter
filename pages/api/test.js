@@ -3,6 +3,7 @@ import OpenAI from 'openai';
 const openai = new OpenAI();
 
 // curl -X POST http://localhost:3000/api/test    -H "Content-Type: application/json"   -d '{"question":"What is your name?"}'
+//` curl -X POST https://meek-dieffenbachia-9db4fb.netlify.app/api/test    -H "Content-Type: application/json"   -d '{"question":"What is your name?"}'`
 
 export default async function handler(req, res) {
 
@@ -27,7 +28,7 @@ export default async function handler(req, res) {
 
             console.log('returning answer', answer);
 
-            res.status(200).json({ answer: answer })
+            res.status(200).json({ reply: answer })
 
             
         } else {
