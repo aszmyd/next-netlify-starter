@@ -8,39 +8,43 @@ const openai = new OpenAI();
 
 export default async function handler(req, res) {
 
-    checkSiteEnabled();
-    console.log('running...', req.body);
-    if(typeof req.body === 'object') {
-        const question = req.body.question;
-        if(typeof question === 'string') {
+    try {
+        checkSiteEnabled();
+        console.log('running...', req.body);
+        if(typeof req.body === 'object') {
+            const question = req.body.question;
+            if(typeof question === 'string') {
 
-            console.log('asking GPT', question);
-            
-            const answer =  (
-                await openai.chat.completions.create({
-                    model: 'gpt-4',
-                    messages: [
-                        {
-                            role: 'user',
-                            content: question,
-                        },
-                    ],
-                })
-            ).choices[0].message.content ?? ''
+                console.log('asking GPT', question);
+                
+                const answer =  (
+                    await openai.chat.completions.create({
+                        model: 'gpt-4',
+                        messages: [
+                            {
+                                role: 'user',
+                                content: question,
+                            },
+                        ],
+                    })
+                ).choices[0].message.content ?? ''
 
-            console.log('returning answer', answer);
+                console.log('returning answer', answer);
 
-            res.status(200).json({ reply: answer })
+                res.status(200).json({ reply: answer })
 
-            
+                
+            } else {
+
+            res.status(200).json({ message: "Nothing to do" })
+            }
         } else {
 
-         res.status(200).json({ message: "Nothing to do" })
+            res.status(200).json({ message: "Nothing to do" })
         }
-    } else {
-
-        res.status(200).json({ message: "Nothing to do" })
+    } catch(e) {
+        console.error(e);
+        res.status(500).json({ error: e.message })
     }
-    
 
   }
