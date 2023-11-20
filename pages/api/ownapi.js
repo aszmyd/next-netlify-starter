@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import OpenAI from 'openai';
-import { checkSiteEnabled } from '../_api_guard';
+import { checkSiteEnabled } from './_api_guard';
 const openai = new OpenAI();
 
 // curl -X POST http://localhost:3000/api/ownapi    -H "Content-Type: application/json"   -d '{"question":"What is your name?"}'
