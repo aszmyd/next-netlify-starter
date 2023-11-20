@@ -10,6 +10,7 @@ const openai = new OpenAI();
 // curl -X POST https://glowing-begonia-c1f670.netlify.app/api/ownapipro    -H "Content-Type: application/json"   -d '{"question":"I like bananas and apples"}'
 // curl -X POST https://glowing-begonia-c1f670.netlify.app/api/ownapipro    -H "Content-Type: application/json"   -d '{"question":"What fruit do I like that are yellow?"}'
 
+const ownKnowledge = []
 export default async function handler(req, res) {
 
     console.log('running...', req.body);
@@ -21,8 +22,14 @@ export default async function handler(req, res) {
             
             const answer =  (
                 await openai.chat.completions.create({
-                    model: 'gpt-4',
-                    messages: [
+                    model: process.env.GPT_MODEL ?? 'gpt-4',
+                    messages: [ {
+                            role: 'system',
+                            content: `Your job is to either answer the question user asks or, if the user prompt is not a question, return 'KNOWLEDGE'
+                                Additional context###\n${ownKnowledge.join('\n')}###
+                            `,
+                        },
+                        
                         {
                             role: 'user',
                             content: question,
@@ -31,11 +38,15 @@ export default async function handler(req, res) {
                 })
             ).choices[0].message.content ?? ''
 
-            console.log('returning answer', answer);
+            console.log('gpt answer', answer);
 
-            res.status(200).json({ reply: answer })
-
-            
+            if(answer === 'KNOWLEDGE') {
+                // Knowledge to remember
+                ownKnowledge.push(question);
+                res.status(200).json({ reply: 'OK' })
+            } else {
+                res.status(200).json({ reply: answer })
+            }
         } else {
 
          res.status(200).json({ message: "Nothing to do" })
