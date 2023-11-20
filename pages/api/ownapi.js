@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import OpenAI from 'openai';
+import { checkSiteEnabled } from '../_api_guard';
 const openai = new OpenAI();
 
 // curl -X POST http://localhost:3000/api/ownapi    -H "Content-Type: application/json"   -d '{"question":"What is your name?"}'
@@ -7,6 +8,7 @@ const openai = new OpenAI();
 
 export default async function handler(req, res) {
 
+    checkSiteEnabled();
     console.log('running...', req.body);
     if(typeof req.body === 'object') {
         const question = req.body.question;
