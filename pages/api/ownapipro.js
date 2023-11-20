@@ -2,8 +2,13 @@ import 'dotenv/config';
 import OpenAI from 'openai';
 const openai = new OpenAI();
 
-// curl -X POST http://localhost:3000/api/test    -H "Content-Type: application/json"   -d '{"question":"What is your name?"}'
-//` curl -X POST https://meek-dieffenbachia-9db4fb.netlify.app/api/test    -H "Content-Type: application/json"   -d '{"question":"What is your name?"}'`
+// curl -X POST http://localhost:3000/api/ownapipro    -H "Content-Type: application/json"   -d '{"question":"What is your name?"}'
+// curl -X POST http://localhost:3000/api/ownapipro    -H "Content-Type: application/json"   -d '{"question":"I like bananas and apples"}'
+// curl -X POST http://localhost:3000/api/ownapipro    -H "Content-Type: application/json"   -d '{"question":"What fruit do I like that are yellow?"}'
+
+// curl -X POST https://glowing-begonia-c1f670.netlify.app/api/ownapipro    -H "Content-Type: application/json"   -d '{"question":"What is your name?"}'`
+// curl -X POST https://glowing-begonia-c1f670.netlify.app/api/ownapipro    -H "Content-Type: application/json"   -d '{"question":"I like bananas and apples"}'
+// curl -X POST https://glowing-begonia-c1f670.netlify.app/api/ownapipro    -H "Content-Type: application/json"   -d '{"question":"What fruit do I like that are yellow?"}'
 
 export default async function handler(req, res) {
 
