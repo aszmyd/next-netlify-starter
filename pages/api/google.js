@@ -7,6 +7,7 @@ const { getJson } = require("serpapi");
 
 // curl -X POST http://localhost:3000/api/google    -H "Content-Type: application/json"   -d '{"question":"Kto jest obecnym marszałkiem sejmu RP?"}'
 // curl -X POST http://localhost:3000/api/google    -H "Content-Type: application/json"   -d '{"question":"Portal niebezpiecznik.pl napisał kiedyś artykuł na temat zastrzegania numeru pesel. Możesz zwrócić mi adres URL do niego? Tylko potrzebuję do tego najnowszego."}'
+// curl -X POST http://localhost:3000/api/google    -H "Content-Type: application/json"   -d '{"question":"Szukam adresu strony na której mogę się zapisać na newsletter prowadzony przez Jakuba Mrugalskiego. To jakiś newsletter technologiczny, ale nie pamietam nazwy."}'
 // curl -X POST https://glowing-begonia-c1f670.netlify.app/api/google    -H "Content-Type: application/json"   -d '{"question":"Kto jest obecnym marszałkiem sejmu RP?"}'
 
 const askChat = async (question, additionalContext = '') => {
@@ -20,6 +21,7 @@ const askChat = async (question, additionalContext = '') => {
                     If don't know the answer, respond 'DONT_KNOW' and nothing more.
                     Always respond in the language of the question.
                     Be precise and concise.
+                    If the questions is about URL address, return just the link, nothing more.
                     Today is: ${new Date().toISOString()}
                     ${additionalContext && additionalContext.length > 0 ? `Additional context: ###${additionalContext}###` : ''}
                     `,
