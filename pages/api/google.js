@@ -6,7 +6,8 @@ const { getJson } = require("serpapi");
 
 
 // curl -X POST http://localhost:3000/api/google    -H "Content-Type: application/json"   -d '{"question":"Kto jest obecnym marszałkiem sejmu RP?"}'
-// curl -X POST https://glowing-begonia-c1f670.netlify.app/api/google    -H "Content-Type: application/json"   -d '{"question":"Kto jest obecnym marszałkiem sejmu RP?"}'`
+// curl -X POST http://localhost:3000/api/google    -H "Content-Type: application/json"   -d '{"question":"Portal niebezpiecznik.pl napisał kiedyś artykuł na temat zastrzegania numeru pesel. Możesz zwrócić mi adres URL do niego? Tylko potrzebuję do tego najnowszego."}'
+// curl -X POST https://glowing-begonia-c1f670.netlify.app/api/google    -H "Content-Type: application/json"   -d '{"question":"Kto jest obecnym marszałkiem sejmu RP?"}'
 
 const askChat = async (question, additionalContext = '') => {
     return  (
@@ -44,7 +45,7 @@ export default async function handler(req, res) {
                 const answer =  await askChat(question);
                 console.log(`GPT answer: ${answer}`);
 
-                if(answer === 'DONT_KNOW') {
+                if(answer === 'DONT_KNOW' || answer.toLowerCase().indexOf('przepraszam' >= -1)) {
                     console.log(`GPT doesn't know the answer, trying to search on google`);
                     const serpResult = await getJson({
                         engine: "google",
@@ -53,8 +54,11 @@ export default async function handler(req, res) {
                     });
 
                     if(serpResult.organic_results.length > 0) {
-                        const organicResultsSnippets = serpResult.organic_results.slice(0,5).map(result => result.snippet);
-                        const context = organicResultsSnippets.join('\n');
+                        // console.log('serpResult', serpResult);
+                        const organicResultsSnippets = serpResult.organic_results.slice(0,5).map(result =>
+                            `link: ${result.link}\n${result.date ? `date: ${result.date}` : ''}\ncontent:${result.snippet}\n`
+                            );
+                        const context = organicResultsSnippets.join('###\n');
                         console.log(`Context from google:\n---------------------\n${context}\n---------------------`);
                         const answerWithContext = await askChat(question, context);
                         console.log(`GPT answer with context: ${answerWithContext}`);
